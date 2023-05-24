@@ -1,0 +1,48 @@
+_BASE_: "../Base-YOLOv7.yaml"
+MODEL:
+  WEIGHTS: ""
+  MASK_ON: False
+  BACKBONE:
+    NAME: "build_darknet_backbone"
+  DARKNET:
+    WEIGHTS: "/root/autodl-tmp/models/pretrained_models/yolov3.pt" # using pytorch weights from ultralytics's yolov3
+    DEPTH: 53
+    STEM_OUT_CHANNELS: 32
+    OUT_FEATURES: ["dark3", "dark4", "dark5"]
+  YOLO:
+    ANCHORS:
+      [
+        [[116, 90], [156, 198], [373, 326]],
+        [[30, 61], [62, 45], [42, 119]],
+        [[10, 13], [16, 30], [33, 23]],
+      ]
+    CLASSES: 4
+    IN_FEATURES: ["dark3", "dark4", "dark5"]
+    CONF_THRESHOLD: 0.2
+    NMS_THRESHOLD: 0.1
+    IGNORE_THRESHOLD: 0.6
+    NECK:
+      TYPE: "fpn"
+      WITH_SPP: True
+DATASETS:
+  TRAIN: ("zerawaste_train",)
+  TEST: ("zerawaste_val",)
+
+SOLVER:
+  IMS_PER_BATCH: 12
+  BASE_LR: 0.005
+  WARMUP_ITERS: 1000
+  STEPS: (5000, 12000)
+  MAX_ITER: 15000
+  CLIP_GRADIENTS:
+    ENABLED: True
+  CHECKPOINT_PERIOD: 3000
+  REFERENCE_WORLD_SIZE: 12
+TEST:
+  EVAL_PERIOD: 2000
+OUTPUT_DIR: "outputs_zerowaste/darknet53_zerowaste"
+VIS_PERIOD: 5000
+
+DATALOADER:
+  # proposals are part of the dataset_dicts, and take a lot of RAM
+  NUM_WORKERS: 12

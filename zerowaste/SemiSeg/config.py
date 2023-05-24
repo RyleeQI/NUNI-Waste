@@ -1,0 +1,102 @@
+from yacs.config import CfgNode as CN
+
+_C = CN()
+
+_C.EXP = "exp1"
+_C.COMMENT = "no comment"
+_C.DEBUG = False
+
+_C.INFER = CN()
+
+_C.MODEL = CN()
+_C.MODEL.NAME = "Name"  # Model name
+_C.MODEL.METHOD = "Base"
+_C.MODEL.LOSSES = [
+    # "BCEDiceLoss",
+    # "FocusBCEDiceLoss",
+    # "OHMEBCEDiceLoss",
+    # "AdaptiveBCELoss",
+    "SoftmaxL1Loss",
+    "BCLoss",
+    "AdaptiveBCLoss",
+]
+_C.MODEL.WEIGHT = ""
+_C.MODEL.PROJECT_NUM = 5
+_C.MODEL.USING_PRETRAINED_MODEL = False
+_C.MODEL.SEG_HEAD_LOSS = "BCEDiceLoss"
+_C.MODEL.SEMI_SEG_HEAD_LOSS = "L1Loss"
+_C.MODEL.ADD_SEMI_LOSS = True
+
+_C.MODEL.USING_RESNET50 = False
+_C.MODEL.USING_RESNET34 = True
+_C.MODEL.USING_RESNET18 = False
+_C.MODEL.SEG_LOSS_ON = True
+_C.MODEL.SEMI_SEG_LOSS_ON = False
+_C.MODEL.SEMI_SEG_LOSS_SCALE = 0.1
+_C.MODEL.ADD_FEATS_NOISE = False
+_C.MODEL.ADD_FEATS_DROP = False
+_C.MODEL.ADD_SEMI_SEG_BCE_LOSS = False
+_C.MODEL.ADD_SEMI_SEG_BCE_LOSS_EPOCHS = 400
+
+_C.SYSTEM = CN()
+_C.SYSTEM.SEED = 42
+_C.SYSTEM.OPT_L = "O0"
+_C.SYSTEM.CUDA = True
+_C.SYSTEM.MULTI_GPU = False
+_C.SYSTEM.NUM_WORKERS = 2
+
+_C.DIRS = CN()
+_C.DIRS.DATA = "./database/"
+_C.DIRS.WEIGHTS = "./weights/"
+_C.DIRS.OUTPUTS = "./outputs/"
+_C.DIRS.LOGS = "./logs/"
+_C.DIRS.TEST = "./output/"
+
+_C.DATA = CN()
+_C.DATA.INP_CHANNELS = 3
+_C.DATA.SEG_CLASSES = 1
+_C.DATA.NAME = ["zerowaste"]
+_C.DATA.SIZE = [544, 960]
+_C.DATA.CROP_SIZE = [512, 512]
+_C.DATA.USING_WEAK_AUG = False
+_C.DATA.USING_MINI_TRAIN = False
+_C.DATA.SEMI_TRAINING = True
+_C.DATA.ADD_ADEPTIVE_NOISE = False
+_C.DATA.FOCUS_ADD_ADEPTIVE_NOISE = False
+_C.DATA.MAX_PIXEL_DETLA = 40.
+_C.DATA.SUP_COLOR_AUG_PROBS = 0.2
+_C.DATA.SUP_OFFSET_AUG_PROBS = 0.5
+_C.DATA.OFFSET_VALUE = 70.
+_C.DATA.CURVE_PERIOD = 1200.
+_C.DATA.AUG_OFFLINE_PATH = "./database/zerowaste/detla_offsets"
+
+_C.OPT = CN()
+_C.OPT.OPTIMIZER = "adamw"
+_C.OPT.GD_STEPS = 1
+_C.OPT.WARMUP_EPOCHS = 0
+_C.OPT.BASE_LR = 1e-3
+_C.OPT.WEIGHT_DECAY = 1e-2
+_C.OPT.WARM_UP = 0
+_C.OPT.MAX_C = 1.0
+
+_C.METRIC = CN()
+_C.METRIC.SIGMOID = False
+_C.METRIC.THRESHOLD = 0.5
+
+_C.TRAIN = CN()
+_C.TRAIN.METHOD = "full"
+_C.TRAIN.EPOCHS = 50
+_C.TRAIN.BATCH_SIZE = 1
+_C.TRAIN.UNLABELED_BATCH_SIZE = 1
+
+_C.VAL = CN()
+_C.VAL.EPOCH = 1
+_C.VAL.BATCH_SIZE = 1
+
+_C.CONST = CN()
+
+_C.TEST = CN()
+_C.TEST.BATCH_SIZE = 1
+
+def get_cfg_defaults():
+    return _C.clone()
